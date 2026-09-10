@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens do Portal PHIQ (Tailwind v4 — bloco @theme)
+   Gera utilitários como bg-phiq-primary, text-phiq-dark etc.
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --color-phiq-primary: #08766f; /* verde principal */
+  --color-phiq-dark: #143c39; /* verde escuro */
+  --color-phiq-accent: #ff861f; /* laranja destaque */
+  --color-phiq-bg: #f3f7f6; /* fundo claro */
+  --color-phiq-muted: #607572; /* cinza neutro */
+}
+
+/* Fonte Inter carregada via next/font/google (app/layout.tsx) */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Base global */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-phiq-bg);
+  color: #22312f;
+}
+
+/* Seleção de texto em laranja suave */
+::selection {
+  background-color: rgb(255 134 31 / 0.3);
+}
