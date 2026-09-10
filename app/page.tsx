@@ -2,6 +2,7 @@ import CategorySection from "@/components/CategorySection";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import PlatformBand from "@/components/PlatformBand";
 
 import { groupApplicationsByCategory } from "@/data/applications";
 
@@ -12,11 +13,12 @@ export default function Home() {
     <>
       <Header />
       <Hero />
+      <PlatformBand />
       <main id="conteudo">
         <section
           id="solucoes"
           aria-labelledby="solucoes-title"
-          className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-16 pt-2 sm:px-6 lg:px-8"
+          className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-20 pt-6 sm:px-6 sm:pb-24 lg:px-8"
         >
           <h2
             id="solucoes-title"

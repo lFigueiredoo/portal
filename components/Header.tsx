@@ -1,12 +1,17 @@
+import { User } from "lucide-react";
 import Link from "next/link";
 
 import Logo from "@/components/Logo";
 import MobileNav from "@/components/MobileNav";
 
 const NAV_LINKS = [
-  { label: "Portal PHIQ", href: "/" },
   { label: "Sistemas", href: "/#solucoes" },
   { label: "Sobre", href: "/#sobre" },
+] as const;
+
+const NAV_ACTIONS = [
+  { label: "Portal PHIQ", href: "/", variant: "solid" },
+  { label: "Minha Conta", variant: "outline" },
 ] as const;
 
 export default function Header() {
@@ -45,15 +50,23 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          {/* Login único PHIQ: apenas visual por enquanto */}
+          {/* Ações de conta: apenas visual por enquanto (login único PHIQ futuro) */}
           <button
             type="button"
-            className="inline-flex items-center rounded-xl border border-phiq-primary/40 px-4 py-2 text-sm font-semibold text-phiq-primary transition-colors hover:bg-phiq-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
+            className="hidden items-center gap-2 rounded-xl border border-phiq-primary/40 px-4 py-2 text-sm font-semibold text-phiq-primary transition-colors hover:bg-phiq-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2 sm:inline-flex"
           >
-            Entrar
+            <User className="h-4 w-4" aria-hidden="true" />
+            Minha Conta
           </button>
 
-          <MobileNav links={NAV_LINKS} />
+          <Link
+            href="/"
+            className="hidden items-center rounded-xl bg-phiq-primary px-4 py-2 text-sm font-semibold text-white shadow-md shadow-phiq-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-phiq-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2 sm:inline-flex"
+          >
+            Portal PHIQ
+          </Link>
+
+          <MobileNav links={NAV_LINKS} actions={NAV_ACTIONS} />
         </div>
       </div>
     </header>

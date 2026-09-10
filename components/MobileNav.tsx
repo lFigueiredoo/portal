@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, User, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,11 +9,19 @@ export type MobileNavLink = {
   href: string;
 };
 
-export default function MobileNav({
-  links,
-}: {
+export type MobileNavAction = {
+  label: string;
+  /** Presente → renderiza como link; ausente → botão visual (login único ainda não implementado). */
+  href?: string;
+  variant: "solid" | "outline";
+};
+
+type MobileNavProps = {
   links: readonly MobileNavLink[];
-}) {
+  actions?: readonly MobileNavAction[];
+};
+
+export default function MobileNav({ links, actions }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -71,8 +79,40 @@ export default function MobileNav({
       {open ? (
         <div
           id="mobile-nav-panel"
-          className="absolute right-0 top-12 w-56 rounded-2xl border border-phiq-dark/10 bg-white p-2 shadow-xl"
+          className="absolute right-0 top-12 w-60 rounded-2xl border border-phiq-dark/10 bg-white p-2 shadow-xl"
         >
+          {actions && actions.length > 0 ? (
+            <div className="flex flex-col gap-2 p-1">
+              {actions.map((action) => {
+                const styles =
+                  action.variant === "solid"
+                    ? "bg-phiq-primary text-white shadow-md shadow-phiq-primary/25 hover:bg-phiq-dark"
+                    : "border border-phiq-primary/40 text-phiq-primary hover:bg-phiq-primary/5";
+                const className = `inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2 ${styles}`;
+
+                return action.href ? (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    onClick={() => setOpen(false)}
+                    className={className}
+                  >
+                    {action.label}
+                  </Link>
+                ) : (
+                  <button key={action.label} type="button" className={className}>
+                    <User className="h-4 w-4" aria-hidden="true" />
+                    {action.label}
+                  </button>
+                );
+              })}
+              <div
+                aria-hidden="true"
+                className="mx-1 mt-1 border-t border-phiq-dark/10"
+              />
+            </div>
+          ) : null}
+
           <nav aria-label="Navegação (mobile)" className="flex flex-col">
             {links.map((link) => (
               <Link

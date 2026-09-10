@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://portal.phiq.com.br"),
   title: "Portal PHIQ",
   description:
-    "Todos os sistemas, soluções e conhecimentos da PHIQ em um único lugar.",
+    "O ecossistema digital que conecta qualidade, gestão e conhecimento.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

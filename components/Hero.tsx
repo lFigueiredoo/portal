@@ -1,15 +1,18 @@
-import {
-  ArrowRight,
-  ChartColumn,
-  CheckCircle2,
-  Clock3,
-  FileCheck2,
-  Sparkles,
-} from "lucide-react";
+import Image from "next/image";
 
-/* Alturas (%) das barras do mock de indicadores */
-const CHART_BARS = [42, 66, 54, 80, 62, 92, 74];
+import { ArrowRight, Sparkles } from "lucide-react";
 
+/**
+ * Imagem institucional da coluna visual do hero.
+ *
+ * Se o asset existir em `public/`, o hero usa a foto institucional
+ * (next/image, fill + object-cover). Se a constante for `null`
+ * (ex.: arquivo indisponível), renderiza a variante institucional com
+ * gradiente da marca + padrão de pontos — nunca mockups de software.
+ */
+const HERO_IMAGE: string | null = "/hero-industry.jpg";
+
+/* Padrão de pontos sutil (apenas na variante gradiente). */
 function HeroPattern() {
   return (
     <svg
@@ -33,21 +36,26 @@ function HeroPattern() {
 
 export default function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden">
+    <section
+      aria-labelledby="hero-title"
+      className="relative overflow-hidden bg-white"
+    >
+      {/* Divisor suave entre o hero e a faixa seguinte */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-phiq-dark/10 to-transparent"
+      />
+
       {/* Brilho decorativo suave */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full bg-phiq-primary/10 blur-3xl"
       />
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
         {/* Coluna de texto */}
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-phiq-accent/30 bg-phiq-accent/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-phiq-dark">
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full bg-phiq-accent"
-            />
+          <span className="inline-flex items-center gap-2 rounded-full border border-phiq-primary/15 bg-phiq-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-phiq-primary">
             Central digital da PHIQ
           </span>
 
@@ -58,20 +66,19 @@ export default function Hero() {
             Portal PHIQ
           </h1>
 
-          <p className="mt-4 max-w-xl text-lg font-semibold text-phiq-dark/90 sm:text-xl">
-            Todos os sistemas, soluções e conhecimentos da PHIQ em um único
-            lugar.
+          <p className="mt-5 max-w-xl text-xl font-semibold leading-snug text-phiq-dark sm:text-2xl">
+            O ecossistema digital que conecta qualidade, gestão e conhecimento.
           </p>
 
-          <p className="mt-3 max-w-xl text-base text-phiq-muted sm:text-lg">
-            Uma experiência integrada para acessar ferramentas digitais,
-            indicadores, documentos e plataformas PHIQ.
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-phiq-muted sm:text-lg">
+            Acesse documentos, indicadores, sistemas e soluções PHIQ em um
+            único lugar.
           </p>
 
           <div className="mt-8">
             <a
               href="#solucoes"
-              className="group inline-flex items-center gap-2 rounded-2xl bg-phiq-primary px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-phiq-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-phiq-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
+              className="group inline-flex items-center gap-2 rounded-2xl bg-phiq-primary px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-phiq-primary/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-phiq-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
             >
               Acessar sistemas
               <ArrowRight
@@ -82,88 +89,35 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Coluna visual — painel com cards flutuantes */}
-        <div className="relative">
-          <div className="relative flex min-h-[420px] flex-col justify-between gap-5 overflow-hidden rounded-3xl bg-linear-to-br from-phiq-primary to-phiq-dark p-5 shadow-2xl shadow-phiq-dark/25 sm:min-h-[460px] sm:p-6">
-            <HeroPattern />
+        {/* Coluna visual — imagem institucional */}
+        <div>
+          <div className="relative min-h-[360px] w-full overflow-hidden rounded-3xl shadow-2xl shadow-phiq-dark/25 ring-1 ring-phiq-dark/10 sm:min-h-[440px] lg:min-h-[540px]">
+            {HERO_IMAGE ? (
+              <Image
+                src={HERO_IMAGE}
+                alt="Vidraria e tubos de ensaio em laboratório durante análises de qualidade"
+                fill
+                priority
+                sizes="(min-width: 1024px) 33rem, 100vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-linear-to-br from-phiq-primary to-phiq-dark">
+                <HeroPattern />
+              </div>
+            )}
 
-            <span className="relative z-10 inline-flex items-center gap-1.5 self-end rounded-full bg-phiq-accent px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg shadow-phiq-accent/30">
+            {/* Gradiente verde sutil na base da imagem */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-phiq-dark/90 via-phiq-primary/40 to-transparent"
+            />
+
+            {/* Chip de identidade sobre a imagem */}
+            <span className="absolute bottom-5 left-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-phiq-accent px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg shadow-phiq-accent/30">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Qualidade PHIQ
             </span>
-
-            {/* Mock: indicadores de qualidade */}
-            <div className="relative z-10 w-full max-w-xs -rotate-1 rounded-2xl border border-white/25 bg-white/10 p-4 shadow-xl backdrop-blur-md sm:self-start">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
-                  <ChartColumn
-                    className="h-4 w-4 text-white"
-                    aria-hidden="true"
-                  />
-                </span>
-                <p className="text-sm font-semibold text-white">
-                  Indicadores de qualidade
-                </p>
-              </div>
-              <div
-                aria-hidden="true"
-                className="mt-3 flex h-16 items-end gap-1.5"
-              >
-                {CHART_BARS.map((height, index) => (
-                  <div
-                    key={index}
-                    style={{ height: `${height}%` }}
-                    className={`flex-1 rounded-t-md ${
-                      index === CHART_BARS.length - 1
-                        ? "bg-phiq-accent"
-                        : "bg-white/60"
-                    }`}
-                  />
-                ))}
-              </div>
-              <p className="mt-2 text-xs text-white/75">
-                Conformidade em alta no último trimestre
-              </p>
-            </div>
-
-            {/* Mock: status de documentos do Docs-Q */}
-            <div className="relative z-10 w-full max-w-xs rotate-1 rounded-2xl border border-white/25 bg-white/10 p-4 shadow-xl backdrop-blur-md sm:self-end">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
-                  <FileCheck2
-                    className="h-4 w-4 text-white"
-                    aria-hidden="true"
-                  />
-                </span>
-                <p className="text-sm font-semibold text-white">Docs-Q</p>
-                <span className="ml-auto text-xs text-white/70">
-                  Documentos
-                </span>
-              </div>
-              <ul className="mt-3 space-y-2 text-xs text-white/85">
-                <li className="flex items-center justify-between gap-3">
-                  <span>Relatórios de análise</span>
-                  <CheckCircle2
-                    className="h-4 w-4 shrink-0 text-emerald-300"
-                    aria-hidden="true"
-                  />
-                </li>
-                <li className="flex items-center justify-between gap-3">
-                  <span>Certificados de qualidade</span>
-                  <CheckCircle2
-                    className="h-4 w-4 shrink-0 text-emerald-300"
-                    aria-hidden="true"
-                  />
-                </li>
-                <li className="flex items-center justify-between gap-3">
-                  <span>Fichas técnicas</span>
-                  <Clock3
-                    className="h-4 w-4 shrink-0 text-amber-200"
-                    aria-hidden="true"
-                  />
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>

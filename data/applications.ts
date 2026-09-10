@@ -102,7 +102,7 @@ export const APPS: PhiqApplication[] = [
     id: "docs-q",
     name: "Docs-Q",
     category: "Clientes",
-    description: "Documentos, indicadores e conformidade da qualidade.",
+    description: "Documentos, indicadores e evidências da qualidade.",
     icon: "file-check",
     status: "soon",
   },
