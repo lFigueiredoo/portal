@@ -79,7 +79,7 @@ export default function MobileNav({ links, actions }: MobileNavProps) {
       {open ? (
         <div
           id="mobile-nav-panel"
-          className="absolute right-0 top-12 w-60 rounded-2xl border border-phiq-dark/10 bg-white p-2 shadow-xl"
+          className="absolute right-0 top-12 w-64 rounded-3xl border border-phiq-dark/10 bg-white p-3 shadow-2xl shadow-phiq-dark/20"
         >
           {actions && actions.length > 0 ? (
             <div className="flex flex-col gap-2 p-1">
@@ -87,7 +87,7 @@ export default function MobileNav({ links, actions }: MobileNavProps) {
                 const styles =
                   action.variant === "solid"
                     ? "bg-phiq-primary text-white shadow-md shadow-phiq-primary/25 hover:bg-phiq-dark"
-                    : "border border-phiq-primary/40 text-phiq-primary hover:bg-phiq-primary/5";
+                    : "border border-phiq-dark/15 bg-white text-phiq-dark hover:border-phiq-primary/40 hover:text-phiq-primary";
                 const className = `inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2 ${styles}`;
 
                 return action.href ? (

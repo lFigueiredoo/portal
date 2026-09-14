@@ -1,125 +1,104 @@
-import Image from "next/image";
+﻿import Image from "next/image";
+import { Leaf, Lightbulb, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 
-import { ArrowRight, Sparkles } from "lucide-react";
+type HeroPanelItem = {
+  title: string;
+  text: string;
+  icon: LucideIcon;
+};
 
-/**
- * Imagem institucional da coluna visual do hero.
- *
- * Se o asset existir em `public/`, o hero usa a foto institucional
- * (next/image, fill + object-cover). Se a constante for `null`
- * (ex.: arquivo indisponível), renderiza a variante institucional com
- * gradiente da marca + padrão de pontos — nunca mockups de software.
- */
-const HERO_IMAGE: string | null = "/hero-industry.jpg";
+const HERO_PANEL_ITEMS: HeroPanelItem[] = [
+  { title: "Qualidade", text: "em cada processo", icon: ShieldCheck },
+  { title: "Inovação", text: "em todas as áreas", icon: Lightbulb },
+  { title: "Pessoas", text: "que fazem acontecer", icon: Users },
+  { title: "Um futuro", text: "mais sustentável", icon: Leaf },
+];
 
-/* Padrão de pontos sutil (apenas na variante gradiente). */
-function HeroPattern() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="absolute inset-0 h-full w-full opacity-15"
-    >
-      <defs>
-        <pattern
-          id="hero-dots"
-          width="22"
-          height="22"
-          patternUnits="userSpaceOnUse"
-        >
-          <circle cx="1.5" cy="1.5" r="1.5" fill="#FFFFFF" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#hero-dots)" />
-    </svg>
-  );
-}
+/** Container global: mesmo eixo do logo no header. */
+const CONTAINER = "mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-12";
 
 export default function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative overflow-hidden bg-white"
+      className="relative h-[430px] w-full overflow-hidden bg-white"
     >
-      {/* Divisor suave entre o hero e a faixa seguinte */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-phiq-dark/10 to-transparent"
+      {/* ── Imagem única — integrada ao fade ──────────────────────── */}
+      <Image
+        src="/images/hero-banner-final.jpg"
+        alt="Profissional PHIQ em laboratório, com jaleco e óculos de proteção, trabalhando com pipeta"
+        fill
+        priority
+        sizes="(min-width: 1024px) 65vw, 100vw"
+        className="object-cover object-[70%_center]"
       />
 
-      {/* Brilho decorativo suave */}
+      {/* Fade branco contínuo — sem coluna separada */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-0 h-80 w-80 rounded-full bg-phiq-primary/10 blur-3xl"
+        className="absolute inset-y-0 left-0 w-[48%] bg-linear-to-r from-white via-white to-transparent"
       />
 
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-8 lg:pb-24 lg:pt-20">
-        {/* Coluna de texto */}
-        <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-phiq-primary/15 bg-phiq-primary/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-phiq-primary">
-            Central digital da PHIQ
+      {/* ── Container global — mesmo eixo do logo do header ───────── */}
+      <div className={`${CONTAINER} relative z-10 h-full`}>
+        {/* Bloco esquerdo — centralizado verticalmente */}
+        <div className="flex h-full w-[440px] max-w-[440px] flex-col justify-center">
+          {/* Overline elegante */}
+          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-phiq-primary">
+            Bem-vindo ao
           </span>
 
+          {/* Título principal */}
           <h1
             id="hero-title"
-            className="mt-6 text-4xl font-bold tracking-tight text-phiq-dark sm:text-5xl lg:text-6xl"
+            className="mt-1 text-[2.8rem] font-extrabold leading-[1.02] tracking-[-0.03em] text-phiq-dark sm:text-[3.1rem] lg:text-[3.4rem]"
           >
             Portal PHIQ
           </h1>
 
-          <p className="mt-5 max-w-xl text-xl font-semibold leading-snug text-phiq-dark sm:text-2xl">
-            O ecossistema digital que conecta qualidade, gestão e conhecimento.
+          {/* Subtítulo — 2 linhas, line-height sofisticado */}
+          <p className="mt-5 max-w-[280px] text-lg font-semibold leading-[1.35] text-phiq-dark sm:text-xl">
+            Todos os nossos sistemas e soluções
+            <br className="hidden sm:block" />
+            em um único lugar.
           </p>
 
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-phiq-muted sm:text-lg">
-            Acesse documentos, indicadores, sistemas e soluções PHIQ em um
-            único lugar.
+          {/* Descrição — largura contida */}
+          <p className="mt-3.5 max-w-[310px] text-sm leading-relaxed text-phiq-muted">
+            Acesse ferramentas, documentos, indicadores e plataformas PHIQ de
+            forma simples e segura.
           </p>
 
-          <div className="mt-8">
-            <a
-              href="#solucoes"
-              className="group inline-flex items-center gap-2 rounded-2xl bg-phiq-primary px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-phiq-primary/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-phiq-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
-            >
-              Acessar sistemas
-              <ArrowRight
-                className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </a>
-          </div>
+          {/* Assinatura — uma linha, discreta */}
+          <p className="mt-6 font-script text-lg leading-tight text-phiq-primary sm:text-xl">
+            Soluções que impulsionam resultados
+          </p>
+          {/* Linha decorativa — alinhada ao início da assinatura */}
+          <span
+            aria-hidden="true"
+            className="mt-2.5 block h-[3px] w-[70px] rounded-full bg-phiq-accent"
+          />
         </div>
+      </div>
 
-        {/* Coluna visual — imagem institucional */}
-        <div>
-          <div className="relative min-h-[360px] w-full overflow-hidden rounded-3xl shadow-2xl shadow-phiq-dark/25 ring-1 ring-phiq-dark/10 sm:min-h-[440px] lg:min-h-[540px]">
-            {HERO_IMAGE ? (
-              <Image
-                src={HERO_IMAGE}
-                alt="Vidraria e tubos de ensaio em laboratório durante análises de qualidade"
-                fill
-                priority
-                sizes="(min-width: 1024px) 33rem, 100vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-linear-to-br from-phiq-primary to-phiq-dark">
-                <HeroPattern />
-              </div>
-            )}
-
-            {/* Gradiente verde sutil na base da imagem */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-phiq-dark/90 via-phiq-primary/40 to-transparent"
-            />
-
-            {/* Chip de identidade sobre a imagem */}
-            <span className="absolute bottom-5 left-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-phiq-accent px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg shadow-phiq-accent/30">
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-              Qualidade PHIQ
-            </span>
-          </div>
-        </div>
+      {/* ── Painel de valores — único, à direita ─────────────────── */}
+      <div
+        className="absolute z-10 w-[300px] max-w-[300px] rounded-3xl border border-white/20 bg-phiq-dark/35 p-5 shadow-2xl shadow-phiq-dark/30 backdrop-blur-xl"
+        style={{ right: "40px", top: "50%", transform: "translateY(-50%)" }}
+      >
+        <ul className="flex flex-col gap-4">
+          {HERO_PANEL_ITEMS.map((item) => (
+            <li key={item.title} className="flex items-center gap-3.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/12 text-white/90">
+                <item.icon className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <p className="text-[0.85rem] leading-snug text-white">
+                <span className="block font-semibold">{item.title}</span>
+                <span className="text-white/70">{item.text}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

@@ -43,6 +43,8 @@ export interface PhiqApplication {
   url?: string;
   icon: AppIconKey;
   status: ApplicationStatus;
+  /** Rótulo opcional do botão do card (ex.: "Solicitar análise"). */
+  cta?: string;
   /** Papéis com acesso (login único / permissões no futuro). */
   audiences?: Audience[];
 }
@@ -62,22 +64,19 @@ export const CATEGORY_META: Record<
 > = {
   "Clientes": {
     label: "Para Clientes",
-    description:
-      "Documentos, acompanhamento de serviços e resultados para clientes PHIQ.",
+    description: "Acesse os seus documentos, indicadores e serviços.",
   },
   "Gestão": {
     label: "Para Gestão",
-    description:
-      "Sistemas comerciais e indicadores estratégicos para decisões do dia a dia.",
+    description: "Ferramentas para o time PHIQ.",
   },
   "Conhecimento": {
     label: "Para Conhecimento",
-    description: "Treinamentos e capacitação contínua para equipes e parceiros.",
+    description: "Capacitação e desenvolvimento.",
   },
   "Serviços": {
-    label: "Para Serviços",
-    description:
-      "Soluções especializadas em qualidade, análises e atendimento técnico.",
+    label: "Nossos Serviços",
+    description: "Soluções especializadas.",
   },
 };
 
@@ -142,9 +141,10 @@ export const APPS: PhiqApplication[] = [
     id: "phiq-lab",
     name: "PHIQ LAB",
     category: "Serviços",
-    description: "Análises laboratoriais e soluções em qualidade.",
+    description: "Análises laboratoriais, laudos e qualidade da água.",
     icon: "flask-conical",
     status: "soon",
+    cta: "Solicitar análise",
   },
 ];
 
