@@ -51,22 +51,51 @@ autenticado sem user_profiles → /sem-acesso  (acesso bloqueado)
 
 ## Setup do Appwrite
 
-1. **Projeto** — crie um projeto no [Appwrite Console](https://cloud.appwrite.io)
-   (Cloud ou self-hosted).
-2. **Plataforma Web** — no projeto, Settings → Platforms → Add Platform →
-   Web app. Adicione:
-   - `https://portal.phiq.com.br` (produção)
-   - `http://localhost:3000` (desenvolvimento)
-3. **API key** — Settings → API keys. Escopos mínimos:
-   - `sessions.write` — criar sessão no login (Server Action)
-   - `tablesdb.read` (ou `databases.read` + `tables.read`) — ler a tabela de
-     perfis
-4. **Usuários** — criados no Console (Auth → Users) ou via `account.create`.
-5. **Banco de perfis** — crie um database e a tabela `user_profiles`
-   (colunas abaixo). A permissão de leitura pode ficar restrita ao role
-   `any`+API key — o portal lê via API key no servidor.
-6. **Variáveis de ambiente** — copie `.env.example` para `.env.local` e
-   preencha (Vercel: Project → Settings → Environment Variables).
+### Setup automatizado (recomendado)
+
+Depois de criar o **projeto** no [Appwrite Console](https://cloud.appwrite.io)
+(Cloud ou self-hosted) e adicionar as **plataformas Web**
+(`https://portal.phiq.com.br` e `http://localhost:3000`), tudo o resto é
+criado por um comando.
+
+1. **API key** — no projeto, Settings → API keys. Escopos necessários:
+   - `sessions.write` — criar sessão no login do portal
+   - `users.read`, `users.write` — localizar e criar o administrador
+   - `tablesdb.read`, `tablesdb.write` — ler perfis e provisionar o banco
+2. **Variáveis** — copie `.env.example` para `.env.local` e preencha:
+   - Conexão: `NEXT_PUBLIC_APPWRITE_ENDPOINT`, `NEXT_PUBLIC_APPWRITE_PROJECT_ID`,
+     `APPWRITE_API_KEY`, `APPWRITE_DATABASE_ID`, `APPWRITE_USER_PROFILES_TABLE_ID`
+   - Administrador: `ADMIN_EMAIL`, `ADMIN_PASSWORD` (8–256 caracteres),
+     `ADMIN_NAME`
+   - (Opcional) nomes específicos do setup: `APPWRITE_ENDPOINT`,
+     `APPWRITE_PROJECT_ID`, `DATABASE_ID`, `USER_PROFILES_TABLE_ID` —
+     se vazios, o script reutiliza os valores do portal acima.
+3. **Executar o setup:**
+
+   ```bash
+   npm run setup:appwrite
+   ```
+
+   O script (`scripts/setup-appwrite.ts`) valida a conexão e os escopos da
+   API key, cria o database, a tabela `user_profiles` com as colunas,
+   restringe o acesso da tabela à API key do servidor e cria o usuário
+   administrador + o perfil `ADMIN`. **Idempotente** — pode ser reexecutado
+   sem duplicar nada. Sem fallbacks: faltando variável, ele interrompe
+   listando o que está faltando.
+4. **Primeiro login** — entre em `/login` com `ADMIN_EMAIL` /
+   `ADMIN_PASSWORD` e o dashboard abre com os 6 sistemas.
+
+> Em produção (Vercel), as variáveis de conexão vão em Project → Settings →
+> Environment Variables. `ADMIN_*` só é necessário para o setup inicial —
+> não precisa estar no ambiente do portal.
+
+### Setup manual (alternativa)
+
+Se preferir criar tudo pelo painel:
+
+1. **Usuários** — Auth → Users (ou via `account.create`).
+2. **Banco de perfis** — crie o database e a tabela `user_profiles`
+   (colunas abaixo), com acesso restrito à API key do servidor.
 
 ### Tabela `user_profiles`
 
@@ -76,7 +105,7 @@ autenticado sem user_profiles → /sem-acesso  (acesso bloqueado)
 | `name` | string | não | nome de exibição |
 | `role` | string | sim | `ADMIN` \| `COLABORADOR` \| `FRANQUEADO` \| `CLIENTE` |
 | `company_id` | string | não | empresa vinculado |
-| `permissions` | string[] | não | chaves explícitas (vazio = padrão do papel) |
+| `permissions` | string[] | não | chaves explícitas (vazio = padrão do papel). Coluna de strings em array — o Appwrite não tem tipo JSON |
 
 Exemplo de linha:
 
@@ -126,6 +155,8 @@ components/
   CategorySection.tsx
   Footer.tsx        # id="sobre"
   Logo.tsx
+scripts/
+  setup-appwrite.ts # npm run setup:appwrite — provisiona o Appwrite pela API
 data/
   applications.ts   # Fonte única de verdade + getAppsForUser (filtro)
 ```
