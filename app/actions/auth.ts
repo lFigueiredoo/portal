@@ -69,6 +69,17 @@ export async function login(
   try {
     await loginWithCredentials(email, password);
   } catch (error) {
+    // Falhas de login ficam registradas no servidor (sem senha).
+    console.warn(
+      "[auth] falha de login:",
+      email,
+      "—",
+      error instanceof AppwriteException
+        ? `HTTP ${error.code} ${error.type ?? ""}: ${error.message}`
+        : error instanceof Error
+          ? error.message
+          : String(error),
+    );
     return { error: describeLoginError(error), email };
   }
 
