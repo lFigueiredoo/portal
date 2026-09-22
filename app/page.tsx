@@ -1,21 +1,16 @@
-﻿import CategorySection from "@/components/CategorySection";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import { redirect } from "next/navigation";
 
-import { APPS } from "@/data/applications";
+import { getCurrentUser } from "@/lib/auth/dal";
 
-export default function Home() {
-  return (
-    <>
-      <Header />
-      <Hero />
-      <main id="conteudo">
-        <div className="mx-auto max-w-[84rem] px-4 pb-12 pt-8 sm:px-6 sm:pb-14 sm:pt-10 lg:px-8">
-          <CategorySection title="Acesse nossos sistemas" apps={APPS} />
-        </div>
-      </main>
-      <Footer />
-    </>
-  );
+// Sempre por request — o destino depende da sessão do visitante.
+export const dynamic = "force-dynamic";
+
+/**
+ * A raiz do portal é apenas um ponto de entrada: sem sessão → /login,
+ * com sessão → /dashboard. O `proxy.ts` normalmente resolve isto antes;
+ * este redirecionamento é a defesa adicional no servidor.
+ */
+export default async function RootPage() {
+  const user = await getCurrentUser();
+  redirect(user ? "/dashboard" : "/login");
 }

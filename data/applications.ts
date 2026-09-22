@@ -1,3 +1,6 @@
+import { hasPermission } from "@/lib/auth/permissions";
+import type { PermissionKey, PublicUser } from "@/lib/auth/types";
+
 /**
  * Fonte única de verdade dos aplicativos do Portal PHIQ.
  *
@@ -7,12 +10,11 @@
  * O card passa a exibir o link "Acessar" automaticamente; enquanto o status
  * for "soon", qualquer `url` preenchida é ignorada pela interface.
  *
- * ── Onde entra audiences / controle de permissão ───────────────
- * O campo opcional `audiences` declara quais papéis enxergam o sistema:
- * "cliente" | "colaborador" | "administrador". Quando o login único PHIQ for
- * implementado, o filtro por papel deve acontecer AQUI (fonte única) — por
- * exemplo, filtrando `APPS` pelo papel do usuário autenticado antes de
- * exportar; os componentes de interface não precisam mudar.
+ * ── Controle de acesso por permissão ───────────────────────────
+ * O campo opcional `permission` declara a chave (lib/auth/types.ts) que
+ * libera o sistema. Apps SEM `permission` ficam visíveis a todos os
+ * autenticados. O filtro por usuário acontece AQUI (fonte única), na
+ * função `getAppsForUser` — os componentes de interface não precisam mudar.
  */
 
 export type ApplicationCategory =
@@ -20,8 +22,6 @@ export type ApplicationCategory =
   | "Gestão"
   | "Conhecimento"
   | "Serviços";
-
-export type Audience = "cliente" | "colaborador" | "administrador";
 
 export type ApplicationStatus = "available" | "soon";
 
@@ -45,8 +45,11 @@ export interface PhiqApplication {
   status: ApplicationStatus;
   /** Rótulo opcional do botão do card (ex.: "Solicitar análise"). */
   cta?: string;
-  /** Papéis com acesso (login único / permissões no futuro). */
-  audiences?: Audience[];
+  /**
+   * Permissão que libera o sistema (ver lib/auth/types.ts). Ausente =
+   * visível a todos os usuários autenticados.
+   */
+  permission?: PermissionKey;
 }
 
 export interface ApplicationGroup {
@@ -104,6 +107,7 @@ export const APPS: PhiqApplication[] = [
     description: "Documentos, indicadores e evidências da qualidade.",
     icon: "file-check",
     status: "soon",
+    permission: "edocs",
   },
   {
     id: "area-do-cliente",
@@ -112,6 +116,7 @@ export const APPS: PhiqApplication[] = [
     description: "Acompanhamento de serviços, relatórios e resultados.",
     icon: "clipboard-list",
     status: "soon",
+    permission: "area-do-cliente",
   },
   {
     id: "crm-phiq-nexus",
@@ -120,6 +125,7 @@ export const APPS: PhiqApplication[] = [
     description: "Gestão comercial, atendimento e relacionamento.",
     icon: "users",
     status: "soon",
+    permission: "crm",
   },
   {
     id: "bi-gestao-a-vista",
@@ -128,6 +134,7 @@ export const APPS: PhiqApplication[] = [
     description: "Indicadores estratégicos e desempenho.",
     icon: "chart-column",
     status: "soon",
+    permission: "bi",
   },
   {
     id: "universidade-phiq",
@@ -136,6 +143,7 @@ export const APPS: PhiqApplication[] = [
     description: "Treinamentos, cursos e capacitação.",
     icon: "graduation-cap",
     status: "soon",
+    permission: "universidade",
   },
   {
     id: "phiq-lab",
@@ -147,6 +155,16 @@ export const APPS: PhiqApplication[] = [
     cta: "Solicitar análise",
   },
 ];
+
+/**
+ * Filtra o catálogo pelas permissões do usuário autenticado.
+ * É o único ponto de filtro do portal — as telas consomem esta função.
+ */
+export function getAppsForUser(user: PublicUser): PhiqApplication[] {
+  return APPS.filter(
+    (app) => !app.permission || hasPermission(user, app.permission),
+  );
+}
 
 /**
  * Agrupa os aplicativos por categoria, na ordem fixa:

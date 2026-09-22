@@ -14,9 +14,9 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const FOOTER_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Sistemas", href: "/#solucoes" },
-  { label: "Sobre", href: "/#sobre" },
+  { label: "Início", href: "/dashboard" },
+  { label: "Sistemas", href: "/dashboard#solucoes" },
+  { label: "Sobre", href: "/dashboard#sobre" },
   { label: "Contato", href: "mailto:contato@phiq.com.br" },
 ] as const;
 

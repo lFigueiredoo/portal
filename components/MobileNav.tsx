@@ -11,8 +11,10 @@ export type MobileNavLink = {
 
 export type MobileNavAction = {
   label: string;
-  /** Presente → renderiza como link; ausente → botão visual (login único ainda não implementado). */
+  /** Presente → renderiza como link. */
   href?: string;
+  /** Presente → renderiza como formulário com a Server Action (ex.: logout). */
+  action?: () => Promise<void>;
   variant: "solid" | "outline";
 };
 
@@ -99,6 +101,12 @@ export default function MobileNav({ links, actions }: MobileNavProps) {
                   >
                     {action.label}
                   </Link>
+                ) : action.action ? (
+                  <form key={action.label} action={action.action}>
+                    <button type="submit" className={className}>
+                      {action.label}
+                    </button>
+                  </form>
                 ) : (
                   <button key={action.label} type="button" className={className}>
                     <User className="h-4 w-4" aria-hidden="true" />
