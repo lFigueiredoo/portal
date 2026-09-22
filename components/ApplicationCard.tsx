@@ -1,95 +1,44 @@
-﻿import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-import type { AppIconKey, PhiqApplication } from "@/data/applications";
-import {
-  ChartColumn,
-  ClipboardList,
-  FileCheck2,
-  FlaskConical,
-  GraduationCap,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
-
-const APP_ICONS: Record<AppIconKey, LucideIcon> = {
-  "file-check": FileCheck2,
-  "clipboard-list": ClipboardList,
-  "users": Users,
-  "chart-column": ChartColumn,
-  "graduation-cap": GraduationCap,
-  "flask-conical": FlaskConical,
-};
-
-/** Sistemas com acento laranja (conforme identidade PHIQ). */
-const ORANGE_APPS = new Set(["crm-phiq-nexus", "bi-gestao-a-vista"]);
+import type { App } from "@/lib/apps/apps";
 
 type ApplicationCardProps = {
-  app: PhiqApplication;
+  app: App;
 };
 
+/** Card de sistema do catálogo — abre em nova aba. */
 export default function ApplicationCard({ app }: ApplicationCardProps) {
-  const Icon = APP_ICONS[app.icon];
-  const isOrange = ORANGE_APPS.has(app.id);
-
-  const iconCircle = isOrange
-    ? "bg-phiq-accent/10 text-phiq-accent"
-    : "bg-phiq-primary/10 text-phiq-primary";
-
-  const action =
-    app.status === "available" && app.url ? (
-      <a
-        href={app.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Acessar ${app.name}`}
-        className={`inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-          isOrange
-            ? "bg-phiq-accent shadow-phiq-accent/25 hover:bg-phiq-dark focus-visible:ring-phiq-accent"
-            : "bg-phiq-primary shadow-phiq-primary/25 hover:bg-phiq-dark focus-visible:ring-phiq-primary"
-        }`}
-      >
-        <ArrowRight className="h-5 w-5" aria-hidden="true" />
-      </a>
-    ) : (
-      <span
-        aria-label={`${app.name} — em breve`}
-        className={`inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-md transition-all duration-200 ${
-          isOrange
-            ? "bg-phiq-accent/90 shadow-phiq-accent/20"
-            : "bg-phiq-primary/90 shadow-phiq-primary/20"
-        }`}
-      >
-        <ArrowRight className="h-5 w-5" aria-hidden="true" />
-      </span>
-    );
-
   return (
-    <article
-      className={`group flex h-full flex-col gap-2.5 rounded-3xl bg-white px-4 pb-4 pt-5 text-center shadow-lg shadow-phiq-dark/8 ring-1 ring-[#E5EEEE] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-phiq-dark/12 ${
-        isOrange ? "hover:ring-phiq-accent/25" : "hover:ring-phiq-primary/25"
-      }`}
-    >
-      {/* Ícone grande dentro de círculo de 72px */}
-      <span
-        className={`mx-auto flex h-[72px] w-[72px] items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-105 ${iconCircle}`}
-      >
-        <Icon className="h-9 w-9" aria-hidden="true" strokeWidth={1.9} />
+    <article className="group flex h-full flex-col gap-2 rounded-3xl bg-white px-5 pb-5 pt-4 shadow-lg shadow-phiq-dark/8 ring-1 ring-[#E5EEEE] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-phiq-dark/12 hover:ring-phiq-primary/25">
+      {/* Categoria do sistema */}
+      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-phiq-primary">
+        {app.category}
       </span>
 
-      {/* Nome do sistema — destaque */}
-      <h4 className="mt-2 text-[0.95rem] font-bold leading-tight text-phiq-dark">
+      {/* Nome do sistema */}
+      <h4 className="text-[1.05rem] font-bold leading-snug text-phiq-dark">
         {app.name}
       </h4>
 
-      {/* Descrição — até 3 linhas, sem cortes */}
-      <p className="px-0.5 text-[0.7rem] leading-relaxed text-phiq-muted">
-        {app.description}
-      </p>
+      {app.description && (
+        <p className="text-sm leading-relaxed text-phiq-muted">
+          {app.description}
+        </p>
+      )}
 
-      {/* Botão circular — canto inferior direito, com alinhamento fino */}
-      <div className="-mb-1 mt-auto flex justify-end">{action}</div>
+      {/* Acessar — sempre em nova aba */}
+      <div className="mt-auto pt-3">
+        <a
+          href={app.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Acessar ${app.name} (abre em nova aba)`}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-phiq-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-phiq-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-phiq-dark hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
+        >
+          Acessar
+          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </div>
     </article>
   );
 }
-
-

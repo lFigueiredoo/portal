@@ -11,7 +11,7 @@ export type Role = "ADMIN" | "COLABORADOR" | "FRANQUEADO" | "CLIENTE";
 
 /**
  * Chaves de permissão por sistema. Cada aplicativo do catálogo
- * (`data/applications.ts`) declara a permissão que libera o seu acesso.
+ * (`lib/apps/apps.ts`) declara a permissão que libera o seu acesso.
  * Adicionar um sistema novo = adicionar uma chave aqui.
  */
 export type PermissionKey =
@@ -19,7 +19,12 @@ export type PermissionKey =
   | "area-do-cliente"
   | "crm"
   | "bi"
-  | "universidade";
+  | "universidade"
+  | "plano-acao"
+  | "contrato-certo"
+  | "performance"
+  | "pcp"
+  | "portal-franqueado";
 
 /** Lista fechada de permissões — usada para validar o campo da tabela. */
 export const PERMISSION_KEYS: readonly string[] = [
@@ -28,6 +33,11 @@ export const PERMISSION_KEYS: readonly string[] = [
   "crm",
   "bi",
   "universidade",
+  "plano-acao",
+  "contrato-certo",
+  "performance",
+  "pcp",
+  "portal-franqueado",
 ];
 
 /** Rótulos de exibição de cada perfil. */

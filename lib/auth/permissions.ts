@@ -14,7 +14,18 @@ import type { PermissionKey, Role } from "@/lib/auth/types";
 
 /** Permissões padrão por papel (quando o usuário não tem lista explícita). */
 export const ROLE_DEFAULT_PERMISSIONS: Record<Role, PermissionKey[]> = {
-  ADMIN: ["edocs", "area-do-cliente", "crm", "bi", "universidade"],
+  ADMIN: [
+    "edocs",
+    "area-do-cliente",
+    "crm",
+    "bi",
+    "universidade",
+    "plano-acao",
+    "contrato-certo",
+    "performance",
+    "pcp",
+    "portal-franqueado",
+  ],
   COLABORADOR: ["crm", "bi", "universidade"],
   FRANQUEADO: ["edocs", "universidade"],
   CLIENTE: ["edocs", "area-do-cliente", "universidade"],
