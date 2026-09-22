@@ -34,8 +34,11 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Com sessão: / e /login levam ao dashboard.
-  if (pathname === "/" || pathname === "/login") {
+  // 2. Com cookie: / leva ao dashboard. /login NÃO é redirecionado aqui —
+  //    um cookie velho/revogado criaria um loop (/login → /dashboard →
+  //    /login → ...). A própria /login resolve com a checagem real do DAL:
+  //    com acesso → /dashboard; sem sessão válida → mostra o formulário.
+  if (pathname === "/") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

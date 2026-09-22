@@ -1,16 +1,20 @@
 import { redirect } from "next/navigation";
 
-import { getCurrentUser } from "@/lib/auth/dal";
+import { getAuthState } from "@/lib/auth/dal";
 
-// Sempre por request — o destino depende da sessão do visitante.
+// Sempre por request — o destino depende do estado de acesso do visitante.
 export const dynamic = "force-dynamic";
 
 /**
  * A raiz do portal é apenas um ponto de entrada: sem sessão → /login,
- * com sessão → /dashboard. O `proxy.ts` normalmente resolve isto antes;
- * este redirecionamento é a defesa adicional no servidor.
+ * autenticado sem perfil → /sem-acesso, com acesso → /dashboard. O
+ * `proxy.ts` normalmente resolve isto antes; este redirecionamento é a
+ * defesa adicional no servidor.
  */
 export default async function RootPage() {
-  const user = await getCurrentUser();
-  redirect(user ? "/dashboard" : "/login");
+  const state = await getAuthState();
+  if (state.status === "anon") {
+    redirect("/login");
+  }
+  redirect(state.status === "blocked" ? "/sem-acesso" : "/dashboard");
 }

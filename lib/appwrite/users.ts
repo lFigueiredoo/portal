@@ -55,8 +55,9 @@ function missingProfileSource(): boolean {
 
 /**
  * Busca o perfil (role/permissions) do usuário na tabela `user_profiles`.
- * Sem tabela configurada ou linha inexistente → `null` (o DAL aplica o
- * papel padrão CLIENTE). Erros de consulta são registrados, nunca propagados.
+ * Sem tabela configurada ou linha inexistente → `null` (o DAL BLOQUEIA o
+ * acesso: usuário sem perfil não entra no portal). Erros de consulta são
+ * registrados, nunca propagados.
  */
 export async function getUserProfile(appwriteUserId: string): Promise<UserProfile | null> {
   if (missingProfileSource()) {

@@ -35,6 +35,7 @@ portal.phiq.com.br            → /login       (sem sessão)
                      ↘        → /dashboard   (com sessão)
 /login  → Appwrite Auth       → /dashboard
 /logout → encerra sessão      → /login
+autenticado sem user_profiles → /sem-acesso  (acesso bloqueado)
 ```
 
 - **Identidade (Appwrite Auth)** — `account.createEmailPasswordSession()`
@@ -42,7 +43,8 @@ portal.phiq.com.br            → /login       (sem sessão)
   `account.deleteSession("current")` no logout. O segredo da sessão fica
   no cookie httpOnly `appwrite_session` (7 dias, expira junto com a sessão).
 - **`proxy.ts`** — proteção otimista (presença do cookie) em todas as rotas:
-  sem cookie → `/login?next=...`; com cookie, `/` e `/login` → `/dashboard`.
+  sem cookie → `/login?next=...`; com cookie, `/` → `/dashboard` (`/login`
+  segue para a própria página, que decide com a checagem real).
 - **`lib/auth/dal.ts`** — verificação REAL: `account.get()` no Appwrite +
   perfil no banco. Páginas e Server Actions chamam `requireUser`/
   `requirePermission`.
@@ -89,18 +91,21 @@ Exemplo de linha:
 ```
 
 Permissões válidas: `edocs`, `area-do-cliente`, `crm`, `bi`, `universidade`
-(`lib/auth/types.ts`). Usuário sem perfil na tabela → papel padrão `CLIENTE`.
+(`lib/auth/types.ts`). Usuário autenticado **sem perfil** na tabela → acesso
+bloqueado (`/sem-acesso`): o administrador precisa criar a linha antes do
+primeiro acesso — não existe papel padrão.
 
 ## Estrutura
 
 ```
 app/
   layout.tsx        # Metadata, fonte Inter, lang pt-BR
-  page.tsx          # Redireciona: /login (sem sessão) ou /dashboard (com sessão)
+  page.tsx          # Redireciona: /login, /dashboard ou /sem-acesso
   login/page.tsx    # Tela de login (identidade PHIQ)
   dashboard/        # Área autenticada (layout exige sessão)
     layout.tsx      # Header com chip do usuário + Footer
     page.tsx        # Saudação + Hero + sistemas por permissão
+  sem-acesso/page.tsx  # Autenticado sem perfil: mensagem + sair
   actions/auth.ts   # Server Actions: login, logout
   globals.css       # Design tokens (@theme) e base global
 lib/appwrite/

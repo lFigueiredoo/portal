@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import Logo from "@/components/Logo";
 import LoginForm from "@/components/LoginForm";
-import { getCurrentUser } from "@/lib/auth/dal";
+import { getAuthState } from "@/lib/auth/dal";
 
 export const metadata: Metadata = {
   title: "Entrar · Portal PHIQ",
@@ -18,10 +18,14 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ next?: string }>;
 }) {
-  // Defesa extra: usuário autenticado nunca vê a tela de login.
-  const user = await getCurrentUser();
-  if (user) {
+  // Defesa extra: quem tem acesso vai para o dashboard; autenticado sem
+  // perfil configurado vai para a página de acesso bloqueado.
+  const state = await getAuthState();
+  if (state.status === "ok") {
     redirect("/dashboard");
+  }
+  if (state.status === "blocked") {
+    redirect("/sem-acesso");
   }
 
   const { next } = await searchParams;
