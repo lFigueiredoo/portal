@@ -73,6 +73,13 @@ export const APPS: readonly App[] = [
     category: "CRM",
     permission: "crm",
   },
+  {
+    id: "PHIQLAB",
+    name: "Relatório PHIQLab",
+    url: "https://clear-water-lab.lovable.app",
+    category: "laboratório",
+    permission: "crm",
+  },
 ] as const satisfies readonly App[];
 
 /**
