@@ -24,7 +24,8 @@ export type PermissionKey =
   | "contrato-certo"
   | "performance"
   | "pcp"
-  | "portal-franqueado";
+  | "portal-franqueado"
+  | "phiqlab";
 
 /** Lista fechada de permissões — usada para validar o campo da tabela. */
 export const PERMISSION_KEYS: readonly string[] = [
@@ -38,6 +39,7 @@ export const PERMISSION_KEYS: readonly string[] = [
   "performance",
   "pcp",
   "portal-franqueado",
+  "phiqlab",
 ];
 
 /** Rótulos de exibição de cada perfil. */

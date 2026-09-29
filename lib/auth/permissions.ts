@@ -25,9 +25,10 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<Role, PermissionKey[]> = {
     "performance",
     "pcp",
     "portal-franqueado",
+    "phiqlab",
   ],
-  COLABORADOR: ["crm", "bi", "universidade"],
-  FRANQUEADO: ["edocs", "universidade"],
+  COLABORADOR: ["crm", "bi", "universidade","phiqlab"],
+  FRANQUEADO: ["edocs", "universidade","phiqlab"],
   CLIENTE: ["edocs", "area-do-cliente", "universidade"],
 };
 
