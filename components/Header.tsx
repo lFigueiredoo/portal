@@ -43,14 +43,8 @@ export default function Header({ user }: HeaderProps) {
       </a>
 
       <div className="mx-auto flex h-[64px] max-w-[80rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        {/* Logo à esquerda */}
-        <Link
-          href="/dashboard"
-          aria-label="Portal PHIQ — início"
-          className="rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-phiq-primary focus-visible:ring-offset-2"
-        >
-          <Logo />
-        </Link>
+        {/* Logo à esquerda — link para o site oficial da PHIQ */}
+        <Logo />
 
         {/* Menu central simples e institucional */}
         <nav
